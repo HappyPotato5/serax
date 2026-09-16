@@ -1,4 +1,10 @@
 
+//! [![Crates.io](https://img.shields.io/badge/Crates.io-latest-blue?style=for-the-badge&logo=rust&logoColor=black&labelColor=BBBBBB)](https://crates.io/crates/serax)
+//! [![Docs.rs](https://img.shields.io/badge/Documentation-Serax-blue?style=for-the-badge&logo=Docs.rs&logoColor=black&labelColor=BBBBBB)](https://docs.rs/serax/latest/serax/)
+//! [![Github](https://img.shields.io/badge/Github-Serax-blue?style=for-the-badge&logo=github&logoColor=black&labelColor=BBBBBB)](https://github.com/HappyPotato5/serax)
+//! [![License](https://img.shields.io/badge/License-Serax/License-blue?style=for-the-badge&logo=readdotcv&logoColor=black&labelColor=BBBBBB)](https://github.com/HappyPotato5/serax/blob/master/LICENSE)
+//! 
+//! # Serax_macros
 //! The crate that implements all Serax' proc-macros.
 //! 
 //! <div class="warning">
