@@ -8,8 +8,8 @@ authors = ["HappyPotato5"]
 repository = "https://github.com/HappyPotato5/serax"
 
 [dependencies]
-macros = { version = "1.0.0", path = "macros", documentation = false }
+serax_macros = { version = "1.0.0", path = "serax_macros", documentation = false }
 
 [workspace]
 resolver = "3"
-members = ["macros"]
+members = ["serax_macros"]

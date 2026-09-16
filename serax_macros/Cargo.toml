@@ -1,0 +1,16 @@
+[package]
+name = "serax_macros"
+version = "1.0.0"
+edition = "2024"
+description = "Proc-macro crate used in Serax crate."
+license = "GPL-3.0-or-later"
+authors = ["HappyPotato5"]
+repository = "https://github.com/HappyPotato5/serax"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
+syn = { version = "3.0.5", features = ["full"] }

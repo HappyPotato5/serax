@@ -3,15 +3,6 @@
 version = 4
 
 [[package]]
-name = "macros"
-version = "1.0.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "proc-macro2"
 version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -33,7 +24,16 @@ dependencies = [
 name = "serax"
 version = "1.0.0"
 dependencies = [
- "macros",
+ "serax_macros",
+]
+
+[[package]]
+name = "serax_macros"
+version = "1.0.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
