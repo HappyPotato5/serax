@@ -279,6 +279,10 @@ impl<'a> deserialize::Deserializer for &'a mut Deserializer {
     }
 
     // Other
+    fn serialize_boxed<T: Deserialize>(self) -> Result<Box<T>, Self::Err> {
+        Ok(Box::new(T::deserialize(self)?))
+    }
+
     fn deserialize_option<T: Deserialize>(self) -> Result<Option<T>, Self::Err> {
         let is_some = self.take_bool()?;
 

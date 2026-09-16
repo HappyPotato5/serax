@@ -14,11 +14,12 @@
 /// + `Result<O, E>` where O: `Deserialize`, E: `Deserialize`.
 /// + Arrays -> [T; const C: usize] where T: `Deserialize`.
 /// + `Vec<T>` where T: `Deserialize`.
+/// + `Box<T>` where T: `Deserialize`.
 /// + `Box<[T]>` where T: `Deserialize`.
 pub trait Deserialize 
     where Self: Sized {
     /// Reconstructs a `Sized` `Self` from its **serial** form.
-    fn deserialize<T: Deserializer>(deserializer: T) -> Result<Self, T::Err>;
+    fn deserialize<D: Deserializer>(deserializer: D) -> Result<Self, D::Err>;
 }
 
 pub trait Deserializer 
@@ -132,6 +133,11 @@ pub trait Deserializer
     // Map ---------------
     /// Deserializes a map of K-V, key-value pairs where K and V are both [`Deserializable`](Deserialize) types.
     fn deserialize_map<K: Deserialize, V: Deserialize>(self) -> Result<Vec<(K, V)>, Self::Err>;
+
+
+    // Box ---------------
+    /// Deserialize a Boxed T value, where T: [`Deserialize`].
+    fn serialize_boxed<T: Deserialize>(self) -> Result<Box<T>, Self::Err>;
 
 
     // Option ---------------

@@ -10,8 +10,6 @@ Comes with **full support** for Rust **primitive** types, **lists**, **maps**, *
 
 Any type can be made serializable by deriving the `Serialize` macro, same for `Deserialize`.
 
-**<div class="warning">Support for Unsized types is still work in progress.</div>**
-
 ## Examples
 ```rust
 use serax::{binary, Serialize, Deserialize};

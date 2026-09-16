@@ -14,10 +14,11 @@
 ///  + `Result<O, E>` where O: `Serialize`, E: `Serialize`.
 ///  + Arrays -> [T; const C: usize] where T: `Serialize`.
 ///  + `Vec<T>` where T: `Serialize`.
+///  + `Box<T>` where T: `Serialize`.
 ///  + `Box<[T]>` where T: `Serialize`.
 pub trait Serialize {
     /// Creates a serial out of a `Sized` type and a [`Serializer`].
-    fn serialize<T: Serializer>(&self, serializer: T) -> Result<T::Ok, T::Err>;
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Err>;
 }
 
 /// An trait that controls how a Serializable object is turned into a serial.
@@ -135,6 +136,11 @@ pub trait Serializer {
     // Map ---------------
     /// Serializes a Map of K-V, key-value pairs, where K and V are both [`Serializable`](Serialize) types.
     fn serialize_map<K: Serialize, V: Serialize>(self, map: &Vec<(K, V)>) -> Result<Self::Ok, Self::Err>;
+
+
+    // Box ---------------
+    /// Serialize a Boxed T object, where T: [`Serialize`].
+    fn serialize_boxed<T: Serialize>(self, value: &Box<T>) -> Result<Self::Ok, Self::Err>;
 
 
     // Option ---------------

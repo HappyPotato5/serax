@@ -265,6 +265,10 @@ impl<'a> serialize::Serializer for &'a mut Serializer {
         Ok(())
     }
 
+    fn serialize_boxed<T: Serialize>(self, value: &Box<T>) -> Result<Self::Ok, Self::Err> {
+        value.serialize(self)
+    }
+
     fn serialize_option<T: crate::Serialize>(self, option: &Option<T>) -> Result<Self::Ok, Self::Err> {
         self.serialize_bool(option.is_some())?;
         match option {
@@ -519,5 +523,11 @@ impl<T: Serialize> Serialize for Vec<T> {
 impl<T: Serialize> Serialize for Box<[T]> {
     fn serialize<S: serialize::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Err> {
         serializer.serialize_boxed_slice(self)
+    }
+}
+
+impl<T: Serialize> Serialize for Box<T> {
+    fn serialize<S: serialize::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Err> {
+        serializer.serialize_boxed(self)
     }
 }
