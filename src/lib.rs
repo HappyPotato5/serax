@@ -70,9 +70,9 @@ pub mod deserialize;
 pub mod binary;
 
 #[doc(inline)]
-pub use serialize::{ Serialize, SerializeUnsized };
+pub use serialize::{ Serialize };
 #[doc(inline)]
-pub use deserialize::{ Deserialize, DeserializeUnsized };
+pub use deserialize::{ Deserialize };
 
 
 /// A derive macro that automatically implements [`Serialize`] for any `Sized` type.

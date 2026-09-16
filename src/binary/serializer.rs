@@ -1,5 +1,5 @@
 
-use crate::{Serialize, SerializeUnsized, serialize::{self}};
+use crate::{Serialize, serialize::{self}};
 
 /// An error that showed up during serialization
 #[derive(Debug, Clone)]
@@ -293,10 +293,6 @@ impl serialize::TupleSerializer for TupleSerializer<'_> {
     fn serialize_element<T: crate::Serialize>(&mut self, element: &T) -> Result<(), Self::Err> {
         element.serialize(&mut *self.serializer)
     }
-
-    fn serialize_last_element_unsized<T: crate::SerializeUnsized>(self, element: &T) -> Result<Self::Ok, Self::Err> {
-        element.serialize_unsized(&mut *self.serializer)
-    }
 }
 
 impl serialize::SubSerializer for TupleSerializer<'_> {
@@ -317,10 +313,6 @@ impl serialize::StructSerializer for StructSerializer<'_> {
     fn serialize_field<T: crate::Serialize>(&mut self, _: &str, value: &T) -> Result<(), Self::Err> {
         value.serialize(&mut *self.serializer)
     }
-
-    fn serialize_last_field_unsized<T: crate::SerializeUnsized>(self, _: &str, value: &T) -> Result<Self::Ok, Self::Err> {
-        value.serialize_unsized(&mut *self.serializer)
-    }
 }
 
 impl serialize::SubSerializer for StructSerializer<'_> {
@@ -340,10 +332,6 @@ struct StructUnnamedSerializer<'a> {
 impl serialize::StructUnnamedSerializer for StructUnnamedSerializer<'_> {
     fn serialize_unnamed_field<T: crate::Serialize>(&mut self, value: &T) -> Result<(), Self::Err> {
         value.serialize(&mut *self.serializer)
-    }
-
-    fn serialize_last_unnamed_field_unsized<T: crate::SerializeUnsized>(self, value: &T) -> Result<Self::Ok, Self::Err> {
-        value.serialize_unsized(&mut *self.serializer)
     }
 }
 
@@ -499,12 +487,6 @@ impl Serialize for char {
 
 impl Serialize for String {
     fn serialize<S: serialize::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Err> {
-        serializer.serialize_str(self)
-    }
-}
-
-impl SerializeUnsized for str {
-    fn serialize_unsized<T: serialize::Serializer>(&self, serializer: T) -> Result<T::Ok, T::Err> {
         serializer.serialize_str(self)
     }
 }

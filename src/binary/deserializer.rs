@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, mem::MaybeUninit};
 
-use crate::deserialize::{Deserialize, DeserializeUnsized, self};
+use crate::deserialize::{Deserialize, self};
 
 /// An error that showed during Deserialization.
 /// 
@@ -309,10 +309,6 @@ impl deserialize::TupleDeserializer for TupleDeserializer<'_> {
     fn deserialize_element<T: Deserialize>(&mut self) -> Result<T, Self::Err> {
         T::deserialize(&mut *self.deserializer)
     }
-
-    fn deserialize_last_element_unsized<T: DeserializeUnsized>(self) -> Result<Box<T>, Self::Err> {
-        T::deserialize_unsized(&mut *self.deserializer)
-    }
 }
 
 impl deserialize::SubDeserializer for TupleDeserializer<'_> {
@@ -332,10 +328,6 @@ impl deserialize::StructDeserializer for StructDeserializer<'_> {
     fn deserialize_field<T: Deserialize>(&mut self, _: &str) -> Result<T, Self::Err> {
         T::deserialize(&mut *self.deserializer)
     }
-
-    fn deserialize_last_field_unsized<T: DeserializeUnsized>(self, _: &str) -> Result<Box<T>, Self::Err> {
-        T::deserialize_unsized(&mut *self.deserializer)
-    }
 }
 
 impl deserialize::SubDeserializer for StructDeserializer<'_> {
@@ -354,10 +346,6 @@ struct StructUnnamedDeserializer<'a> {
 impl deserialize::StructUnnamedDeserializer for StructUnnamedDeserializer<'_> {
     fn deserialize_unnamed_field<T: Deserialize>(&mut self) -> Result<T, Self::Err> {
         T::deserialize(&mut *self.deserializer)
-    }
-
-    fn deserialize_last_unnamed_field_unsized<T: DeserializeUnsized>(self) -> Result<Box<T>, Self::Err> {
-        T::deserialize_unsized(&mut *self.deserializer)
     }
 }
 

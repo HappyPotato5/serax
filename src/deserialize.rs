@@ -15,31 +15,10 @@
 /// + Arrays -> [T; const C: usize] where T: `Deserialize`.
 /// + `Vec<T>` where T: `Deserialize`.
 /// + `Box<[T]>` where T: `Deserialize`.
-pub trait Deserialize: DeserializeUnsized 
+pub trait Deserialize 
     where Self: Sized {
     /// Reconstructs a `Sized` `Self` from its **serial** form.
     fn deserialize<T: Deserializer>(deserializer: T) -> Result<Self, T::Err>;
-}
-
-/// A trait implemented by all `Unsized` types that can be reconstructed from a **serial** of themselves.
-/// 
-/// A **serial** is a flat stream of text or bytes.
-/// 
-/// All the types that implement [`Deserialize`] are DeserializeUnsized by Default, 
-/// and they behave in the same way, but returning a boxed version of the type.
-/// 
-/// ## The following types are DeserializeUnsized by default:
-/// + All [`Deserializable`](Deserialize) types.
-/// + str.
-pub trait DeserializeUnsized {
-    /// Reconstructs an `Unsized` `Self` from its **serial** form.
-    fn deserialize_unsized<T: Deserializer>(deserializer: T) -> Result<Box<Self>, T::Err>;
-}
-
-impl<Ty> DeserializeUnsized for Ty where Ty: Deserialize {
-    fn deserialize_unsized<T: Deserializer>(deserializer: T) -> Result<Box<Self>, T::Err> {
-        Ok(Box::new(Self::deserialize(deserializer)?))
-    }
 }
 
 pub trait Deserializer 
@@ -177,27 +156,18 @@ pub trait SubDeserializer {
 pub trait TupleDeserializer: SubDeserializer {
     /// Deserilizes the next tuple element.
     fn deserialize_element<T: Deserialize>(&mut self) -> Result<T, Self::Err>;
-
-    /// Deserializes the last element of an `Unsized` tuple.
-    fn deserialize_last_element_unsized<T: DeserializeUnsized>(self) -> Result<Box<T>, Self::Err>;
 }
 
 /// A `StructDeserializer` is able to deserialize **named fields** from a struct **in order**, **one at a time**.
 pub trait StructDeserializer: SubDeserializer {
     /// Deserializes the next named field of a struct.
     fn deserialize_field<T: Deserialize>(&mut self, field_name: &str) -> Result<T, Self::Err>;
-
-    /// Deserializes the last named field of an `Unsized` struct.
-    fn deserialize_last_field_unsized<T: DeserializeUnsized>(self, field_name: &str) -> Result<Box<T>, Self::Err>;
 }
 
 /// A `StructUnnamedDeserializer` is able to deserialize **unnamed fields** from a struct **in order**, **one at a time**.
 pub trait StructUnnamedDeserializer: SubDeserializer {
     /// Deserializes the next unnamed field of the struct.
     fn deserialize_unnamed_field<T: Deserialize>(&mut self) -> Result<T, Self::Err>;
-
-    /// Deserializes the last unnamed field of an `Unsized` struct.
-    fn deserialize_last_unnamed_field_unsized<T: DeserializeUnsized>(self) -> Result<Box<T>, Self::Err>;
 }
 
 /// An `EnumDeserializer` is able to deserialize an enum depending of the **variant** stored in the **serial**.

@@ -15,29 +15,9 @@
 ///  + Arrays -> [T; const C: usize] where T: `Serialize`.
 ///  + `Vec<T>` where T: `Serialize`.
 ///  + `Box<[T]>` where T: `Serialize`.
-pub trait Serialize: SerializeUnsized {
+pub trait Serialize {
     /// Creates a serial out of a `Sized` type and a [`Serializer`].
     fn serialize<T: Serializer>(&self, serializer: T) -> Result<T::Ok, T::Err>;
-}
-
-/// A trait implemented by all **`Unsized` types** that can be converted into a **serial**.
-/// 
-/// All **Sized Serializable** types also implement this trait by **default**. And it behaves in the same way.
-/// 
-/// A **serial** is a flat stream of text or bytes.
-/// 
-/// ## The following types implement `SerializeUnsized` by default:
-///  + All Serialize types.
-///  + str.
-pub trait SerializeUnsized {
-    /// Creates a serial out of an `Unsized` type and a [`Serializer`].
-    fn serialize_unsized<T: Serializer>(&self, serializer: T) -> Result<T::Ok, T::Err>;
-}
-
-impl<Ty> SerializeUnsized for Ty where Ty: Serialize {
-    fn serialize_unsized<T: Serializer>(&self, serializer: T) -> Result<T::Ok, T::Err> {
-        self.serialize(serializer)
-    }
 }
 
 /// An trait that controls how a Serializable object is turned into a serial.
@@ -180,9 +160,6 @@ pub trait SubSerializer {
 pub trait TupleSerializer: SubSerializer {
     /// Serializes an element of a tuple.
     fn serialize_element<T: Serialize>(&mut self, element: &T) -> Result<(), Self::Err>;
-
-    /// Serializes the last element of an unsized Tuple.
-    fn serialize_last_element_unsized<T: SerializeUnsized>(self, element: &T) -> Result<Self::Ok, Self::Err>;
 }
 
 /// A [`SubSerializer`] that handles struct serialization.
@@ -191,9 +168,6 @@ pub trait TupleSerializer: SubSerializer {
 pub trait StructSerializer: SubSerializer {
     /// Serializes a named field of a struct.
     fn serialize_field<T: Serialize>(&mut self, field_name: &str, value: &T) -> Result<(), Self::Err>;
-
-    /// Serializes the last named field of an Unsized struct.
-    fn serialize_last_field_unsized<T: SerializeUnsized>(self, field_name: &str, value: &T) -> Result<Self::Ok, Self::Err>;
 }
 
 /// A [`SubSerializer`] that handles struct serialization.
@@ -202,9 +176,6 @@ pub trait StructSerializer: SubSerializer {
 pub trait StructUnnamedSerializer: SubSerializer {
     /// Serializes an unnamed field of a struct.
     fn serialize_unnamed_field<T: Serialize>(&mut self, value: &T) -> Result<(), Self::Err>;
-
-    /// Serializes the last unnamed field of an Unsized struct.
-    fn serialize_last_unnamed_field_unsized<T: SerializeUnsized>(self, value: &T) -> Result<Self::Ok, Self::Err>;
 }
 
 /// A [`SubSerializer`] that handles enum serialization.
