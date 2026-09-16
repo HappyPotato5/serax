@@ -70,8 +70,8 @@ pub use deserialize::{ Deserialize, DeserializeUnsized };
 
 /// A derive macro that automatically implements [`Serialize`] for any `Sized` type.
 #[doc(inline)]
-pub use macros::Serialize;
+pub use serax_macros::Serialize;
 
 /// A derive macro that automatically implements [`Deserialize`] for any `Sized` type.
 #[doc(inline)]
-pub use macros::Deserialize;
+pub use serax_macros::Deserialize;
