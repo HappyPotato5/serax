@@ -1,0 +1,13 @@
+[package]
+name = "serax"
+version = "1.0.0"
+edition = "2024"
+description = "An easy to use serialization library for Rust."
+license = "GPL-3.0-or-later"
+
+[dependencies]
+macros = { version = "1.0.0", path = "macros", documentation = false }
+
+[workspace]
+resolver = "3"
+members = ["macros"]
